@@ -38,7 +38,7 @@ if (isProduction) {
   // In production, only allow your specific frontend URL
   app.use(
     cors({
-      origin: "https://your-deployed-frontend-url.com", // ← REPLACE THIS with your actual URL
+      origin: "https://monumental-meerkat-fc58ef.netlify.app/", // ← REPLACE THIS with your actual URL
     }),
   );
 } else {
