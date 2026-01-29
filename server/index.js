@@ -34,6 +34,7 @@ if (!isProduction) {
     console.log("Morgan logging enabled for development");
   } catch (error) {
     console.log("Morgan not available for logging");
+    console.log(error);
   }
 }
 
