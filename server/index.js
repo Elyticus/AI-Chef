@@ -10,7 +10,7 @@ dotenv.config();
 const app = express();
 
 // Get frontend URL from environment or use localhost
-const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173"; // eslint-disable-line no-undef
+const FRONTEND_URL = process.env.FRONTEND_URL || "https://kitzchef.netlify.app"; // eslint-disable-line no-undef
 const isProduction = process.env.NODE_ENV === "production"; // eslint-disable-line no-undef
 
 console.log(`Frontend URL configured: ${FRONTEND_URL}`);
