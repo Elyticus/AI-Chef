@@ -9,9 +9,6 @@ dotenv.config();
 
 const app = express();
 
-// Allow preflight requests for all routes
-app.options("*", cors());
-
 // Get frontend URL from environment or use localhost
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173"; // eslint-disable-line no-undef
 const isProduction = process.env.NODE_ENV === "production"; // eslint-disable-line no-undef
@@ -19,11 +16,11 @@ const isProduction = process.env.NODE_ENV === "production"; // eslint-disable-li
 console.log(`Frontend URL configured: ${FRONTEND_URL}`);
 console.log(`Environment: ${isProduction ? "production" : "development"}`);
 
-// Configure CORS - same for all environments but with dynamic origin
+// Configure CORS - REMOVED the problematic app.options("*") line
 app.use(
   cors({
     origin: FRONTEND_URL,
-    methods: ["GET", "POST", "OPTIONS"],
+    methods: ["GET", "POST", "OPTIONS"], // Explicitly include OPTIONS
     allowedHeaders: ["Content-Type"],
   }),
 );
