@@ -9,36 +9,26 @@ dotenv.config();
 
 const app = express();
 
-/**
- * CORS
- * Allow requests from Vite dev server
- */
-// app.use(
-//   cors({
-//     origin: "http://localhost:5173", // <-- Will need to change this for Production
-//     methods: ["POST"],
-//     allowedHeaders: ["Content-Type"],
-//   }),
-// );
-
 // Determine the environment
 const isProduction = process.env.NODE_ENV === "production"; // eslint-disable-line no-undef
 
 // Configure logging differently based on environment
 if (!isProduction) {
   // Dynamically import morgan only in development
-  const morgan = await import("morgan");
-  app.use(morgan.default("dev"));
+  const morganModule = await import("morgan");
+  app.use(morganModule.default("dev"));
   console.log("Running in development mode");
 } else {
   console.log("Running in production mode");
 }
 
+// Configure CORS based on environment
 if (isProduction) {
   // In production, only allow your specific frontend URL
+  // CRITICAL: No trailing slash at the end
   app.use(
     cors({
-      origin: "https://monumental-meerkat-fc58ef.netlify.app/", // ← REPLACE THIS with your actual URL
+      origin: "https://monumental-meerkat-fc58ef.netlify.app",
     }),
   );
 } else {
@@ -105,6 +95,5 @@ app.post("/api/recipe", async (req, res) => {
  */
 const PORT = process.env.PORT || 3001; // eslint-disable-line no-undef
 app.listen(PORT, "0.0.0.0", () => {
-  // '0.0.0.0' makes it accessible on the network[citation:4]
   console.log(`Server running on port ${PORT}`);
 });
