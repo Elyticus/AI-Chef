@@ -9,55 +9,45 @@ dotenv.config();
 
 const app = express();
 
-// Determine the environment
+// Allow preflight requests for all routes
+app.options("*", cors());
+
+// Get frontend URL from environment or use localhost
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173"; // eslint-disable-line no-undef
 const isProduction = process.env.NODE_ENV === "production"; // eslint-disable-line no-undef
 
-// Configure logging differently based on environment
+console.log(`Frontend URL configured: ${FRONTEND_URL}`);
+console.log(`Environment: ${isProduction ? "production" : "development"}`);
+
+// Configure CORS - same for all environments but with dynamic origin
+app.use(
+  cors({
+    origin: FRONTEND_URL,
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type"],
+  }),
+);
+
+// Development logging
 if (!isProduction) {
-  // Dynamically import morgan only in development
-  const morganModule = await import("morgan");
-  app.use(morganModule.default("dev"));
-  console.log("Running in development mode");
-} else {
-  console.log("Running in production mode");
+  try {
+    const morgan = await import("morgan");
+    app.use(morgan.default("dev"));
+    console.log("Morgan logging enabled for development");
+  } catch (error) {
+    console.log("Morgan not available for logging");
+  }
 }
 
-// Configure CORS based on environment
-if (isProduction) {
-  // In production, only allow your specific frontend URL
-  // CRITICAL: No trailing slash at the end
-  app.use(
-    cors({
-      origin: "https://monumental-meerkat-fc58ef.netlify.app",
-    }),
-  );
-} else {
-  // In development, use your original localhost config
-  app.use(
-    cors({
-      origin: "http://localhost:5173",
-      methods: ["POST"],
-      allowedHeaders: ["Content-Type"],
-    }),
-  );
-}
-
-/**
- * Parse JSON bodies
- */
 app.use(express.json());
 
-/**
- * OpenAI client
- */
 const client = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY, // eslint-disable-line no-undef
 });
 
-/**
- * Generate recipe
- */
 app.post("/api/recipe", async (req, res) => {
+  console.log("Recipe request received");
+
   const { ingredients } = req.body;
 
   if (!Array.isArray(ingredients) || ingredients.length === 0) {
@@ -81,18 +71,16 @@ app.post("/api/recipe", async (req, res) => {
       temperature: 0.7,
     });
 
+    console.log("Recipe generated successfully");
     res.json({
       recipe: completion.choices[0].message.content,
     });
   } catch (err) {
-    console.error(err);
+    console.error("OpenAI API error:", err.message);
     res.status(500).json({ error: "Failed to generate recipe" });
   }
 });
 
-/**
- * Start server
- */
 const PORT = process.env.PORT || 3001; // eslint-disable-line no-undef
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on port ${PORT}`);
