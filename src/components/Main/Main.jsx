@@ -208,7 +208,7 @@ export default function Main() {
     setIsSidebarExpanded(false);
 
     try {
-      const res = await fetch("https://ai-chef-p7yn.onrender.com/api/recipe", {
+      const res = await fetch("https://ai-chef-uv0r.onrender.com/api/recipe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ingredients }),
