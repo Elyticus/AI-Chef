@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "node index.js"
   },
   "dependencies": {
     "@fortawesome/free-brands-svg-icons": "^7.1.0",
@@ -35,7 +36,7 @@
     "vite": "^7.2.4"
   },
   "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
-  "main": "eslint.config.js",
+  "main": "index.js",
   "keywords": [],
   "author": "",
   "license": "ISC"
