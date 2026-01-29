@@ -17,10 +17,11 @@ console.log(`Frontend URL configured: ${FRONTEND_URL}`);
 console.log(`Environment: ${isProduction ? "production" : "development"}`);
 
 // Configure CORS - REMOVED the problematic app.options("*") line
+
 app.use(
   cors({
     origin: FRONTEND_URL,
-    methods: ["GET", "POST", "OPTIONS"], // Explicitly include OPTIONS
+    methods: ["GET", "POST", "OPTIONS"],
     allowedHeaders: ["Content-Type"],
   }),
 );
