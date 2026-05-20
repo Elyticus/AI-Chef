@@ -462,9 +462,17 @@ export default function Main() {
               </form>
             </div>
 
+            {/* Loading State */}
+            {loading && (
+              <div className="loading-panel">
+                <div className="loading-orb" />
+                <p className="loading-text">Cooking up something delicious…</p>
+              </div>
+            )}
+
             {/* Generated Recipe Section */}
             <div ref={recipeSectionRef}>
-              {recipe && (
+              {recipe && !loading && (
                 <div className="generated-recipe">
                   <div className="recipe-header">
                     <h3 className="recipe-title">
